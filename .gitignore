@@ -1,4 +1,5 @@
-vscode
+vscode/
+messages/
 *.exe
 *.o
 *.in
