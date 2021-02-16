@@ -30,8 +30,6 @@ DELAY = 60
 TEXT = "До экзамена осталось: {} {}, а ты ничего не выучил"
 
 while True:
-    delta = datetime.timedelta(hours=UTC, minutes=0) 
-    t = datetime.datetime.now(datetime.timezone.utc) + delta
     NOW = datetime.datetime.now()
     s = (END_DATE - NOW).total_seconds()
     minutes = s // 60
