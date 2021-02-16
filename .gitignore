@@ -1,5 +1,5 @@
 vscode/
-messages/
+data/
 *.exe
 *.o
 *.in
