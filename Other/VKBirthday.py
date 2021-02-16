@@ -16,6 +16,7 @@ def captcha_handler(captcha):
 
 LOGIN = ''
 PASSWORD = ''
+CHAT_ID = None
 
 vk_session = vk_api.VkApi(
     LOGIN, PASSWORD,
@@ -34,7 +35,7 @@ except vk_api.AuthError as error_msg:
 
 vk = vk_session.get_api()
 
-d = dict(messages.method('messages.getChat', chat_id=126))
+d = dict(messages.method('messages.getChat', chat_id=CHAT_ID))
 
 print(d['users'])
 

@@ -15,7 +15,7 @@ def right_ending(m):
     return 'минут'
 
 
-with open('token.txt', 'r') as f:
+with open('token.in', 'r') as f:
     token = f.readline()
 
 vk = vk_api.VkApi(token=token)

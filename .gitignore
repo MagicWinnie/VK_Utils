@@ -1,5 +1,4 @@
-token.txt
-login.txt
 vscode
 *.exe
 *.o
+*.in
