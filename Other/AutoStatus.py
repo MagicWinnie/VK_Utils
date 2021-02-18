@@ -8,12 +8,27 @@ import datetime
 import time
 import os
 
-def right_ending(m):
+def right_ending(m, t):
+    endings = {
+        'm': ['минута', 'минуты', 'минут'],
+        'd': ['день', 'дня', 'дней'],
+        'h': ['час', 'часа', 'часов']
+    }
     if m % 10 == 1 and m % 100 != 11:
-        return 'минута'
+        return endings[t][0]
     if m % 10 in (2, 3, 4) and m % 100 not in (12, 13, 14):
-        return 'минуты'
-    return 'минут'
+        return endings[t][1]
+    return endings[t][2]
+
+def dateDiffInSeconds(d1, d2):
+    time_d = d2 - d1
+    return time_d.days * 24 * 3600 + time_d.seconds
+
+def secs2dhm(seconds):
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+    return (days, hours, minutes)
 
 FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
 with open(os.path.join(FOLDER, 'token.in'), 'r') as f:
@@ -28,12 +43,16 @@ END_DATE = datetime.datetime(2019, 6, 5, 14, 0, 0, 0)
 # delay between updates, sec
 DELAY = 60
 # status text
-TEXT = "До экзамена осталось: {} {}, а ты ничего не выучил"
+TEXT = "До {} осталось: {} дней {} часов {} минут"
 
-while True:
-    NOW = datetime.datetime.now()
-    s = (END_DATE - NOW).total_seconds()
-    minutes = s // 60
-    vk.method("status.set", {"text": TEXT.format(minutes, right_ending(minutes))})
-    time.sleep(DELAY)
-    
+NOW = datetime.datetime.now()
+PREV = time.time()
+
+while END_DATE > NOW:
+    if time.time() - PREV >= 60:
+        d, h, m = secs2dhm(dateDiffInSeconds(NOW, END_DATE))
+        vk.method("status.set", {"text": TEXT.format(EVENT, right_ending(d, 'd'), right_ending(h, 'h'), right_ending(m, 'm'))})
+        NOW = datetime.datetime.now()
+        PREV = time.time()
+
+vk.method("status.set", {"text": "Готово"})
