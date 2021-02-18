@@ -39,7 +39,7 @@ vk = vk_api.VkApi(token=token)
 # time zone offset
 UTC = 7
 # year, month, date, hour, minutes
-END_DATE = datetime.datetime(2019, 6, 5, 14, 0, 0, 0)
+END_DATE = datetime.datetime(2021, 8, 10, 0, 0, 0, 0)
 # delay between updates, sec
 DELAY = 60
 # status text
@@ -52,7 +52,7 @@ PREV = time.time()
 while END_DATE > NOW:
     if time.time() - PREV >= 60:
         d, h, m = secs2dhm(dateDiffInSeconds(NOW, END_DATE))
-        vk.method("status.set", {"text": TEXT.format(EVENT, right_ending(d, 'd'), right_ending(h, 'h'), right_ending(m, 'm'))})
+        vk.method("status.set", {"text": TEXT.format(EVENT, right_ending(d, 'd'), right_ending(h, 'h'), right_ending(m, 'm')), "v": "5.130"})
         NOW = datetime.datetime.now()
         PREV = time.time()
 
