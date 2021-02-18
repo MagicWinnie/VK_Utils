@@ -43,6 +43,7 @@ END_DATE = datetime.datetime(2019, 6, 5, 14, 0, 0, 0)
 # delay between updates, sec
 DELAY = 60
 # status text
+EVENT = ""
 TEXT = "До {} осталось: {} {} {} "
 
 NOW = datetime.datetime.now()
