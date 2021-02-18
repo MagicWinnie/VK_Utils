@@ -46,9 +46,11 @@ NIGHT   = (0, 7)
 messages = []
 speakers = collections.Counter()
 
-FILES = os.listdir('data')
+FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+DATA_FOLDER = 'data'
+FILES = os.listdir(os.path.join(FOLDER, DATA_FOLDER))
 for f in FILES:
-    with open(os.path.join('data', f), 'r', encoding='utf-8') as f_b:
+    with open(os.path.join(FOLDER, DATA_FOLDER, f), 'r', encoding='utf-8') as f_b:
         messages += list(map(process_string, f_b.readlines()))
         speakers[messages[-1].split()[0] + " " + messages[-1].split()[1]] += 1
 

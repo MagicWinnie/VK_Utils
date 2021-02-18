@@ -6,6 +6,7 @@ By @MagicWinnie
 import vk_api
 import datetime 
 import time
+import os
 
 def right_ending(m):
     if m % 10 == 1 and m % 100 != 11:
@@ -14,8 +15,8 @@ def right_ending(m):
         return 'минуты'
     return 'минут'
 
-
-with open('token.in', 'r') as f:
+FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+with open(os.path.join(FOLDER, 'token.in'), 'r') as f:
     token = f.readline()
 
 vk = vk_api.VkApi(token=token)

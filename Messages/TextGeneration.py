@@ -28,9 +28,11 @@ messages = []
 db_keys = []
 db_values = []
 
-FILES = os.listdir('data')
+FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+DATA_FOLDER = 'data'
+FILES = os.listdir(os.path.join(FOLDER, DATA_FOLDER))
 for f in FILES:
-    with open(os.path.join('data', f), 'r', encoding='utf-8') as f_b:
+    with open(os.path.join(FOLDER, DATA_FOLDER, f), 'r', encoding='utf-8') as f_b:
         temp = list(map(process_string, f_b.readlines()))
         temp = list(filter(None, temp))
         temp = list(map(split, temp))
