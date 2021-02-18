@@ -15,10 +15,10 @@ def right_ending(m, t):
         'h': ['час', 'часа', 'часов']
     }
     if m % 10 == 1 and m % 100 != 11:
-        return endings[t][0]
+        return str(m) + ' ' + endings[t][0]
     if m % 10 in (2, 3, 4) and m % 100 not in (12, 13, 14):
-        return endings[t][1]
-    return endings[t][2]
+        return str(m) + ' ' + endings[t][1]
+    return str(m) + ' ' + endings[t][2]
 
 def dateDiffInSeconds(d1, d2):
     time_d = d2 - d1
@@ -43,7 +43,7 @@ END_DATE = datetime.datetime(2019, 6, 5, 14, 0, 0, 0)
 # delay between updates, sec
 DELAY = 60
 # status text
-TEXT = "До {} осталось: {} дней {} часов {} минут"
+TEXT = "До {} осталось: {} {} {} "
 
 NOW = datetime.datetime.now()
 PREV = time.time()
