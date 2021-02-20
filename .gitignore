@@ -4,4 +4,4 @@ __pycache__
 *.exe
 *.o
 *.in
-login.json
+*.json
