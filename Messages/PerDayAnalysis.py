@@ -29,8 +29,6 @@ assert TYPE in range(6)
 
 def process_string(s: str) -> str:
     s = s.strip()
-    s = s.rstrip()
-    s = s.lstrip()
     s = s.replace('\n', '')
     return s
 

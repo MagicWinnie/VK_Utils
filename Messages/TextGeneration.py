@@ -1,5 +1,5 @@
 '''
-Analyze amount of messages with a person
+Generates random text from messages with a person
 * Requires downloading a .zip archive with messages through VKOpt
 as working with messages through VK API became nearly impossible
 * Save the file with following parameters:
@@ -14,8 +14,6 @@ import random
 
 def process_string(s: str) -> str:
     s = s.strip()
-    s = s.rstrip()
-    s = s.lstrip()
     s = s.replace('\n', '')
     # s = s.lower()
     # s = ''.join([i for i in s if i.isalpha() or i == ' '])
