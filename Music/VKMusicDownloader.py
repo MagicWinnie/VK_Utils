@@ -48,7 +48,11 @@ SAVE_PATH = ""
 if not(os.path.exists(SAVE_PATH)):
     os.mkdir(SAVE_PATH)
     
-FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+import platform
+if platform.system() == "Windows":
+    FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+else:
+    FOLDER = '/'.join(os.path.realpath(__file__).split('/')[:-1])
 
 j = json.load(open(os.path.join(FOLDER, 'login.json'), 'r'))
 

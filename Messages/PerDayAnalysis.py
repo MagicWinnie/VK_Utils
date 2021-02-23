@@ -44,7 +44,12 @@ NIGHT   = (0, 7)
 messages = []
 speakers = collections.Counter()
 
-FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+import platform
+if platform.system() == "Windows":
+    FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+else:
+    FOLDER = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+    
 DATA_FOLDER = 'data'
 FILES = os.listdir(os.path.join(FOLDER, DATA_FOLDER))
 for f in FILES:

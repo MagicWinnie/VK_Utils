@@ -30,7 +30,12 @@ def secs2dhm(seconds):
     days, hours = divmod(hours, 24)
     return (days, hours, minutes)
 
-FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+import platform
+if platform.system() == "Windows":
+    FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
+else:
+    FOLDER = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+    
 with open(os.path.join(FOLDER, 'token.in'), 'r') as f:
     token = f.readline()
 
