@@ -15,7 +15,6 @@ By @MagicWinnie
 import os
 import sys
 import json
-import getopt
 import pickle
 import requests
 from time import time
