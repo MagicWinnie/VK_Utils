@@ -17,6 +17,7 @@ for f in FILES:
         m = music_tag.load_file(os.path.join(MUSIC, f))
         del m['album']
         del m['tracknumber']
+        del m['genre']
         m['artist'] = f.split(' - ')[0]
         m['title'] = f.split(' - ')[1][:-4]
         m.save()
