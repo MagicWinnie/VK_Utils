@@ -42,7 +42,11 @@ def remove_symbols(s: str)->str:
     
     return s
 
-SAVE_PATH = ""
+if len(sys.argv) != 2:
+    print("Usage: python3 VKMusicDownloader.py <SavePath>")
+    exit(-1)
+else:
+    SAVE_PATH = sys.argv[1]
 
 if not(os.path.exists(SAVE_PATH)):
     os.mkdir(SAVE_PATH)
