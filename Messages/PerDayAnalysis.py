@@ -13,6 +13,7 @@ By @MagicWinnie
 '''
 
 import os
+import sys
 from datetime import datetime
 import collections
 import numpy as np
@@ -24,7 +25,14 @@ import matplotlib.pyplot as plt
 # 3 - Messages per speaker per time of day
 # 4 - All messages per hour 
 # 5 - Messages per speaker per hour
-TYPE = 5
+
+if len(sys.argv) != 3:
+    print("USAGE: python3 PerDayAnalysis.py <folder> <type>")
+    exit(-1)
+
+DATA_FOLDER = sys.argv[1]
+TYPE = int(sys.argv[2])
+
 assert TYPE in range(6)
 
 def process_string(s: str) -> str:
@@ -45,12 +53,9 @@ messages = []
 speakers = collections.Counter()
 
 import platform
-if platform.system() == "Windows":
-    FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
-else:
-    FOLDER = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+delimeter = '\\' if platform.system() == "Windows" else '/'
+FOLDER = delimeter.join(os.path.realpath(__file__).split(delimeter)[:-1])
     
-DATA_FOLDER = 'data'
 FILES = os.listdir(os.path.join(FOLDER, DATA_FOLDER))
 for f in FILES:
     with open(os.path.join(FOLDER, DATA_FOLDER, f), 'r', encoding='utf-8') as f_b:

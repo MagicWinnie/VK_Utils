@@ -10,35 +10,40 @@ By @MagicWinnie
 '''
 
 import os
+import sys
 import random
 
-def process_string(s: str) -> str:
+def process_string(s: str, toLower: bool = False, alpha: bool = True) -> str:
     s = s.strip()
     s = s.replace('\n', '')
-    # s = s.lower()
-    # s = ''.join([i for i in s if i.isalpha() or i == ' '])
+    if toLower:
+        s = s.lower()
+    if alpha:
+        s = ''.join([i for i in s if i.isalpha() or i == ' '])
     return s
-
-def split(s: str) -> list:
-    return s.split()
 
 messages = []
 db_keys = []
 db_values = []
 
 import platform
-if platform.system() == "Windows":
-    FOLDER = '\\'.join(os.path.realpath(__file__).split('\\')[:-1])
-else:
-    FOLDER = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+delimeter = '\\' if platform.system() == "Windows" else '/'
+FOLDER = delimeter.join(os.path.realpath(__file__).split(delimeter)[:-1])
     
-DATA_FOLDER = 'data'
+if len(sys.argv) != 4:
+    print("USAGE: python3 TextGeneration.py <folder> <whether to lower> <to delete non alpha>")
+    exit(-1)
+
+DATA_FOLDER = sys.argv[1]
+TOLOWER = int(sys.argv[2])
+ALPHA = int(sys.argv[3])
+
 FILES = os.listdir(os.path.join(FOLDER, DATA_FOLDER))
 for f in FILES:
     with open(os.path.join(FOLDER, DATA_FOLDER, f), 'r', encoding='utf-8') as f_b:
-        temp = list(map(process_string, f_b.readlines()))
+        temp = [process_string(x, TOLOWER, ALPHA) for x in f_b.readlines()]
         temp = list(filter(None, temp))
-        temp = list(map(split, temp))
+        temp = list(map(str.split, temp))
         temp = [item for sublist in temp for item in sublist]
         messages += temp
 
