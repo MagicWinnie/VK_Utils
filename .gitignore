@@ -1,7 +1,8 @@
 .vscode/
 data*/
 __pycache__
-*.exe
-*.o
 *.in
 *.json
+*.csv
+*.pickle
+!login.json
