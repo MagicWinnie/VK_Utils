@@ -45,7 +45,7 @@ else:
     df = pd.DataFrame(columns=["time", "id", "first_name", "last_name", "city", "online"])
 
 errorCnt = 0
-delay = 10 # in sec
+delay = args.delay # in sec
 startTime = time.time()
 while True:
     if errorCnt > 5:
