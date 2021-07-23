@@ -116,6 +116,7 @@ while END_DATE > NOW:
         text = runner(NOW, END_DATE)
         try:
             vk.status.set(text=text)
+            TRIES = 0
         except ConnectionError:
             print("[ERROR] No internet connection")
             TRIES += 1

@@ -62,10 +62,12 @@ while True:
         for p in data:
             df.loc[len(df)] = [currentTime, p["id"], p["first_name"], p["last_name"], p["city"]["title"], p["online"]]
         time.sleep(delay - ((time.time() - startTime) % delay))
+        errorCnt = 0
     except KeyboardInterrupt:
         break
     except requests.ConnectionError:
         errorCnt += 1
+        print("[WARNING] Trying to reconnect... Attempt #{}".format(errorCnt))
     except Exception as e:
         print("[ERROR] {}".format(e))
         break
