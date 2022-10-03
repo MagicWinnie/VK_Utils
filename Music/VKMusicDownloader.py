@@ -12,16 +12,10 @@ Downloads music from VK
 By @MagicWinnie
 """
 
-import platform
 import os
-import sys
 import json
 import requests
 from argparse import ArgumentParser
-from time import time
-
-import re
-import string
 
 # working with mp3
 import mutagen
@@ -51,6 +45,7 @@ def remove_symbols(s: str) -> str:
 
     return s
 
+
 parser = ArgumentParser()
 parser.add_argument("output", type=str, help="Output path")
 parser.add_argument("userID", type=int, help="User ID")
@@ -68,7 +63,8 @@ if not (os.path.exists(SAVE_PATH)):
     os.mkdir(SAVE_PATH)
 
 # load credentials
-assert os.path.isfile(args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
+assert os.path.isfile(
+    args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
 j = json.load(open(args.login, "r"))
 
 assert "login" in j, "[ERROR] `login` key does not exist!"
@@ -96,12 +92,14 @@ if not (os.path.exists(FINAL_PATH)):
 
 # get audio list
 audios = vk_audio.get(owner_id=user_id)
-print("{l} audio files will be downloaded to {p}".format(l=len(audios), p=FINAL_PATH))
+print("{l} audio files will be downloaded to {p}".format(
+    l=len(audios), p=FINAL_PATH))
 
 failed = []
 
 for ind, i in enumerate(audios):
-    fileFormat = "{artist} - {title}.mp3".format(artist=i["artist"], title=i["title"])
+    fileFormat = "{artist} - {title}.mp3".format(
+        artist=i["artist"], title=i["title"])
     fileFormat = remove_symbols(fileFormat)
 
     try:
