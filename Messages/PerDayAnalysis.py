@@ -18,6 +18,7 @@ from datetime import datetime
 import collections
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 # 0 - All messages per date
 # 1 - Messages per speaker per date
@@ -64,7 +65,7 @@ for f in FILES:
 
 speakers = list(map(return_key, speakers.most_common(2)))
 
-if TYPE == 0:   
+if TYPE == 0:
     fig, ax = plt.subplots()
     c = collections.Counter()
 
@@ -72,12 +73,14 @@ if TYPE == 0:
         t = m.split()
         c[datetime.strptime(t[-1][:-1], '%d/%m/%Y')] += 1
 
-    ax.bar(c.keys(), c.values())
-    
+    ax.plot(c.keys(), c.values(), 'o', markersize=3)
+    ax.grid()
     ax.set_xlabel("Date")
     ax.set_ylabel("Messages")
     ax.set_title("All messages per date")
-    plt.show()
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=100))
+    plt.gcf().autofmt_xdate()
 
 if TYPE == 1:
     fig, ax = plt.subplots(nrows=1, ncols=2, sharey=True)
@@ -91,19 +94,21 @@ if TYPE == 1:
         else:
             c2[datetime.strptime(t[-1][:-1], '%d/%m/%Y')] += 1
 
-    ax[0].bar(c1.keys(), c1.values(), color='blue')
-    ax[1].bar(c2.keys(), c2.values(), color='red')
+    ax[0].plot(c1.keys(), c1.values(), 'o', color='blue', markersize=3)
+    ax[1].plot(c2.keys(), c2.values(), 'o', color='red', markersize=3)
 
     fig.suptitle("Messages per speaker per date")
-
     ax[0].set_xlabel("Date")
     ax[0].set_ylabel("Messages")
     ax[0].set_title(speakers[0])
-
+    ax[0].grid()
     ax[1].set_xlabel("Date")
     ax[1].set_title(speakers[1])
+    ax[1].grid()
     fig.tight_layout()
-    plt.show()
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=100))
+    plt.gcf().autofmt_xdate()
 
 if TYPE == 2:
     fig, ax = plt.subplots()
@@ -126,7 +131,6 @@ if TYPE == 2:
     ax.set_xlabel("Time of day")
     ax.set_ylabel("Messages")
     ax.set_title("All messages per time of day")
-    plt.show()
 
 if TYPE == 3:
     fig, ax = plt.subplots(nrows=1, ncols=2, sharey=True)
@@ -167,7 +171,6 @@ if TYPE == 3:
     ax[1].set_xlabel("Time of day")
     ax[1].set_title(speakers[1])
     fig.tight_layout()
-    plt.show()
 
 if TYPE == 4:
     fig, ax = plt.subplots()
@@ -183,7 +186,6 @@ if TYPE == 4:
     ax.set_xlabel("Hour")
     ax.set_ylabel("Messages")
     ax.set_title("All messages per hour ")
-    plt.show()
 
 if TYPE == 5:
     fig, ax = plt.subplots(nrows=1, ncols=2, sharey=True)
@@ -210,5 +212,6 @@ if TYPE == 5:
     ax[1].set_xlabel("Hour")
     ax[1].set_title(speakers[1])
     fig.tight_layout()
-    plt.show()
+
+plt.show()
     
