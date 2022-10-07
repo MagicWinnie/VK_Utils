@@ -26,12 +26,6 @@ parser.add_argument(
     default="../LoginData/login.json",
     help="path to login.json (default: ../LoginData/login.json)",
 )
-parser.add_argument(
-    "--message",
-    type=str,
-    default="",
-    help="Message text",
-)
 args = parser.parse_args()
 
 
