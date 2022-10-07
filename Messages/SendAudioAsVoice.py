@@ -20,8 +20,6 @@ def auth_handler():
 
 parser = ArgumentParser()
 parser.add_argument("file", type=str, help="Your audio file")
-parser.add_argument("peerID", type=int,
-                    help="User ID of the person you are sending to")
 parser.add_argument(
     "--login",
     type=str,
