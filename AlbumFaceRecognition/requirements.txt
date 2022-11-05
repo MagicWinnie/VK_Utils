@@ -1,0 +1,5 @@
+tqdm
+numpy
+scikit-image
+dlib
+face_recognition
