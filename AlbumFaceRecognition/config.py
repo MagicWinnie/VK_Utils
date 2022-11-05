@@ -1,6 +1,6 @@
 ALBUM_IDS                       = ""
-LOGIN_DATA_PATH                 = "../LoginData/login.json"
 IMAGE_SIZE_TYPE                 = 'y'
+LOGIN_DATA_PATH                 = "../LoginData/login.json"
 MODEL                           = "small"
 NUMBER_OF_ATTEMPTS              = 3
 OLDEST_ALBUM_UNIX_TIME          = 1

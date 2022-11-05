@@ -4,7 +4,6 @@ import glob
 import json
 import pickle
 
-
 import vk_api
 import urllib.error
 
