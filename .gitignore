@@ -1,8 +1,10 @@
 .vscode/
 data*/
-__pycache__
+VK_utils_venv/
+__pycache__/
 *.in
 *.json
 *.csv
 *.pickle
+shape_predictor_*.dat
 !login_example.json
