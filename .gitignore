@@ -4,6 +4,7 @@ VK_utils_venv/
 __pycache__/
 *.in
 *.json
+*.jpg
 *.csv
 *.pickle
 shape_predictor_*.dat
