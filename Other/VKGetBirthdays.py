@@ -6,18 +6,15 @@ import os
 import json
 import pandas as pd
 import vk_api
-from vk_messages import MessagesAPI
 from argparse import ArgumentParser
+
+
+print("[WARNING] This script currently does not work due to VK limitations.")
 
 
 def auth_handler(remember_device: bool = True):
     key = input("Enter authentication code: ")
     return key, remember_device
-
-
-def captcha_handler(captcha):
-    key = input("Enter captcha code {0}: ".format(captcha.get_url())).strip()
-    return captcha.try_again(key)
 
 
 parser = ArgumentParser()
@@ -36,7 +33,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-assert os.path.isfile(args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
+assert os.path.isfile(
+    args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
 with open(args.login, "r") as f:
     j = json.load(f)
 
@@ -47,20 +45,17 @@ PASSWORD = j["pass"]
 CHAT_ID = args.chatID
 
 vk_session = vk_api.VkApi(
-    LOGIN, PASSWORD, auth_handler=auth_handler, captcha_handler=captcha_handler
-)
-
-messages = MessagesAPI(login=LOGIN, password=PASSWORD, two_factor=True)
+    login=LOGIN, password=PASSWORD, auth_handler=auth_handler)
 
 try:
-    vk_session.auth()
+    vk_session.auth(token_only=True)
 except vk_api.AuthError as error_msg:
     print(error_msg)
     quit(-1)
 
 vk = vk_session.get_api()
 
-d = dict(messages.method("messages.getChat", chat_id=CHAT_ID))
+d = dict(vk.messages.getChat(chat_id=CHAT_ID))
 
 if d == {}:
     print("[ERROR] No users found")
