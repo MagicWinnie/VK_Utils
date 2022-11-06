@@ -1,2 +1,15 @@
+# basic
 vk-api>=11.8
 requests>=2.22
+# music related
+pydub
+mutagen
+music-tag
+# message analysis, face recognition
+numpy>=1.18
+matplotlib>=3.3
+# face recognition
+tqdm
+scikit-image
+dlib
+face_recognition
