@@ -25,7 +25,7 @@ def auth_handler():
 
 
 img_urls = []
-if not RESTORE_PHOTOS_FROM_PICKLE:
+if not RESTORE_PHOTO_URLS_FROM_PICKLE:
     # login to vk
     assert os.path.isfile(LOGIN_DATA_PATH),\
         "[ERROR] {} is not a file or it does not exist!".format(LOGIN_DATA_PATH)
