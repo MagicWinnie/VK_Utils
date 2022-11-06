@@ -1,7 +1,2 @@
-numpy>=1.18
-matplotlib>=3.3
 vk-api>=11.8
 requests>=2.22
-mutagen
-music-tag
-pydub

@@ -1,0 +1,3 @@
+pydub
+numpy>=1.18
+matplotlib>=3.3
