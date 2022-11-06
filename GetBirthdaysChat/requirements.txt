@@ -1,0 +1,6 @@
+# basic
+vk-api>=11.8
+requests>=2.22
+bs4
+# table
+pandas

@@ -18,7 +18,11 @@ def auth_handler(remember_device: bool = True):
 
 
 parser = ArgumentParser()
-parser.add_argument("chatID", type=int, help="Chat ID")
+parser.add_argument(
+    "chatID",
+    type=int,
+    help="Chat ID"
+)
 parser.add_argument(
     "--login",
     type=str,
@@ -33,8 +37,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-assert os.path.isfile(
-    args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
+assert os.path.isfile(args.login),\
+    "[ERROR] {} is not a file or it does not exist!".format(args.login)
 with open(args.login, "r") as f:
     j = json.load(f)
 
@@ -45,14 +49,10 @@ PASSWORD = j["pass"]
 CHAT_ID = args.chatID
 
 vk_session = vk_api.VkApi(
-    login=LOGIN, password=PASSWORD, auth_handler=auth_handler)
-
-try:
-    vk_session.auth(token_only=True)
-except vk_api.AuthError as error_msg:
-    print(error_msg)
-    quit(-1)
-
+    login=LOGIN, password=PASSWORD,
+    auth_handler=auth_handler
+)
+vk_session.auth(token_only=True)
 vk = vk_session.get_api()
 
 d = dict(vk.messages.getChat(chat_id=CHAT_ID))
@@ -80,5 +80,4 @@ df_dict = {
     "bdate": bdates,
 }
 df = pd.DataFrame(df_dict)
-
 df.to_csv(args.output, index=False)

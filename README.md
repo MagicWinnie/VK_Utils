@@ -42,3 +42,7 @@
 Этот скрипт возвращает ID пользователя по алиасу.  
 Запуск: `python GetUserID.py screenName`.  
 `screenName` &mdash; алиас пользователя.  
+* [Получить дни рождения пользователей в чате](GetBirthdaysChat/GetBirthdaysChat.py)  
+**ВНИМАНИЕ** Данный скрипт пока что не работает из-за ограничений ВК.  
+Запуск: `python GetBirthdaysChat.py chatID`.  
+`chatID` &mdash; ID чата.  
