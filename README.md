@@ -38,3 +38,7 @@
 Запуск: `python GetLikes.py URL OUTPUT`.  
 `URL` &mdash; ссылка на пост, комментарий, фотографию или видео.  
 `OUTPUT` &mdash; куда нужно сохранить таблицу.  
+* [Получить ID пользователя](GetUserID/GetUserID.py)  
+Этот скрипт возвращает ID пользователя по алиасу.  
+Запуск: `python GetUserID.py screenName`.  
+`screenName` &mdash; алиас пользователя.  
