@@ -11,12 +11,14 @@ import vk_api
 def auth_handler():
     key = input("Enter authentication code: ")
     remember_device = True
-
     return key, remember_device
 
 
 parser = ArgumentParser()
-parser.add_argument("-u", "--users", nargs="+", help="User IDs", required=True)
+parser.add_argument(
+    "-u", "--users",
+    nargs="+", help="User IDs", required=True
+)
 parser.add_argument(
     "--delay",
     type=int,
@@ -37,8 +39,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-assert os.path.isfile(
-    args.login), "[ERROR] {} is not a file or it does not exist!".format(args.login)
+assert os.path.isfile(args.login),\
+    "[ERROR] {} is not a file or it does not exist!".format(args.login)
 with open(args.login, "r") as f:
     j = json.load(f)
 
@@ -47,9 +49,10 @@ assert "pass" in j, "[ERROR] `pass` key does not exist!"
 LOGIN = j["login"]
 PASSWORD = j["pass"]
 vk_session = vk_api.VkApi(
-    login=LOGIN, password=PASSWORD, auth_handler=auth_handler)
+    login=LOGIN, password=PASSWORD,
+    auth_handler=auth_handler
+)
 vk_session.auth(token_only=True)
-
 vk = vk_session.get_api()
 
 if os.path.isfile(args.output):
@@ -73,7 +76,7 @@ while True:
         currentTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print("[INFO]", currentTime)
         for p in data:
-            df.loc[len(df)] = [currentTime, p["id"], p["first_name"],
+            df.loc[len(df)] = [currentTime, p["id"], p["first_name"],  # type: ignore
                                p["last_name"], p["city"]["title"] if "city" in p else "", p["online"]]
         time.sleep(delay - ((time.time() - startTime) % delay))
         errorCnt = 0
