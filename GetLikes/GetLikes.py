@@ -12,13 +12,20 @@ import pandas as pd
 def auth_handler():
     key = input("Enter authentication code: ")
     remember_device = True
-
     return key, remember_device
 
 
 parser = ArgumentParser()
-parser.add_argument("url", type=str, help="Url to vk post")
-parser.add_argument("output", type=str, help="Path to the output .csv file")
+parser.add_argument(
+    "url",
+    type=str,
+    help="Url to vk post"
+)
+parser.add_argument(
+    "output",
+    type=str,
+    help="Path to the output .csv file"
+)
 parser.add_argument(
     "--login",
     type=str,
@@ -38,7 +45,9 @@ assert "pass" in j, "[ERROR] `pass` key does not exist!"
 LOGIN = j["login"]
 PASSWORD = j["pass"]
 vk_session = vk_api.VkApi(
-    login=LOGIN, password=PASSWORD, auth_handler=auth_handler)
+    login=LOGIN, password=PASSWORD,
+    auth_handler=auth_handler
+)
 vk_session.auth(token_only=True)
 
 tools = vk_api.VkTools(vk_session)
@@ -47,8 +56,12 @@ vk = vk_session.get_api()
 # choose object type
 # implemented: post, comment, photo, video
 # full list: https://dev.vk.com/method/likes.getList
-CHECK_IF_VK = re.compile(r'^(http:\/\/|https:\/\/)?(www.)?(vk\.com|vkontakte\.ru)')
-CHECK_IF_IMPLEMENTED = re.compile(r'((?<=\/|=)wall|photo|video)(-?[0-9]*)_([0-9]*)(\?reply=)?((?<=reply=)[0-9]*)?')
+CHECK_IF_VK = re.compile(
+    r'^(http:\/\/|https:\/\/)?(www.)?(vk\.com|vkontakte\.ru)'
+)
+CHECK_IF_IMPLEMENTED = re.compile(
+    r'((?<=\/|=)wall|photo|video)(-?[0-9]*)_([0-9]*)(\?reply=)?((?<=reply=)[0-9]*)?'
+)
 
 vk_url = CHECK_IF_IMPLEMENTED.search(args.url)
 assert CHECK_IF_VK.search(args.url), "You have not entered a VK url"
@@ -102,7 +115,7 @@ for i in range(0, len(likes), 100):
         row_list.append(
             {
                 'id': r['id'],
-                'first_name': r['first_name'], 
+                'first_name': r['first_name'],
                 'last_name': r['last_name'],
                 'bday': r['bdate'].split('.')[0] if 'bdate' in r else '',
                 'bmonth': r['bdate'].split('.')[1] if 'bdate' in r else '',
@@ -114,5 +127,6 @@ for i in range(0, len(likes), 100):
                 'last_university': r['universities'][-1]['name'] if 'universities' in r and r['universities'] else '',
             }
         )
-df = pd.DataFrame(row_list, columns=['id', 'first_name', 'last_name', 'bday', 'bmonth', 'byear', 'city', 'sex', 'relation', 'last_school', 'last_university'])
+df = pd.DataFrame(row_list, columns=['id', 'first_name', 'last_name', 'bday',
+                  'bmonth', 'byear', 'city', 'sex', 'relation', 'last_school', 'last_university'])
 df.to_csv(args.output, sep=',', index=False)

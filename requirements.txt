@@ -8,8 +8,9 @@ mutagen
 music-tag
 streamlink
 ffmpeg-python
-# message analysis, face recognition
+# message analysis, tables, face recognition
 numpy>=1.18
+pandas
 matplotlib>=3.3
 # face recognition
 tqdm
