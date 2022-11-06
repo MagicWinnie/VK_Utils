@@ -1,10 +1,13 @@
 # basic
 vk-api>=11.8
 requests>=2.22
+bs4
 # music related
 pydub
 mutagen
 music-tag
+streamlink
+ffmpeg-python
 # message analysis, face recognition
 numpy>=1.18
 matplotlib>=3.3

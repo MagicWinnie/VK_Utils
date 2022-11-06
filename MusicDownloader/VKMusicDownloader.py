@@ -1,25 +1,18 @@
 """
 Downloads music from VK
-* Create a `json` file with login, password and user id:
-`json` file format: 
-{
-    'login': '',
-    'pass': '',
-    'user_id': 
-}
-
-* Put the `json` file next to the script
 By @MagicWinnie
 """
 
 import os
 import json
-import requests
 from argparse import ArgumentParser
 
 # working with mp3
 import mutagen
 import music_tag
+import streamlink
+import ffmpeg
+from io import BytesIO
 
 # working with vk api
 import vk_api
@@ -74,13 +67,13 @@ password = j["pass"]
 user_id = args.userID
 
 # auth in vk
-vk_session = vk_api.VkApi(
+vk_session = vk_api.VkApi(  # type: ignore
     login=login,
     password=password,
     auth_handler=auth_handler,
     captcha_handler=captcha_handler,
 )
-vk_session.auth()
+vk_session.auth(token_only=True)
 
 vk = vk_session.get_api()
 vk_audio = audio.VkAudio(vk_session)
@@ -91,61 +84,73 @@ if not (os.path.exists(FINAL_PATH)):
     os.mkdir(FINAL_PATH)
 
 # get audio list
+print("[INFO] Getting audio file urls.")
 audios = vk_audio.get(owner_id=user_id)
 print("{l} audio files will be downloaded to {p}".format(
     l=len(audios), p=FINAL_PATH))
 
 failed = []
 
-for ind, i in enumerate(audios):
-    fileFormat = "{artist} - {title}.mp3".format(
-        artist=i["artist"], title=i["title"])
-    fileFormat = remove_symbols(fileFormat)
-
+print("[INFO] Starting downloading.")
+for ind, aud in enumerate(audios):
+    fileName = "{artist} - {title}.mp3".format(
+        artist=aud["artist"], title=aud["title"]
+    )
+    fileName = remove_symbols(fileName)
+    fileName = os.path.join(FINAL_PATH, fileName)
     try:
-        if os.path.isfile(os.path.join(FINAL_PATH, fileFormat)):
-            print("{} - Is already downloaded: {}".format(ind + 1, fileFormat))
+        if os.path.isfile(fileName):
+            print("{} - Is already downloaded: {}".format(ind + 1, fileName))
         else:
-            print("{} - Downloading: {}".format(ind + 1, fileFormat), end=" - ")
-            r = requests.get(audios[ind]["url"])
-            if r.status_code == 200:
-                print("Finished")
-                with open(os.path.join(FINAL_PATH, fileFormat), "wb") as out:
-                    out.write(r.content)
-    except OSError:
-        print("{} - Failed to download (OSError): {}".format(ind + 1, fileFormat))
-        failed.append(fileFormat)
+            print("{} - Downloading: {}".format(ind + 1, fileName), end=" - ", flush=True)
+            streams = streamlink.streams(audios[ind]["url"])
+            fd = streams["best"].open()
+            byt = BytesIO()
+            while True:
+                data = fd.read(2**20)
+                byt.write(data)
+                if not data:
+                    break
+            fd.close()
+            byt.seek(0)
+            process = ffmpeg.input("pipe:").output(fileName).run_async(quiet=True, pipe_stdin=True)
+            process.communicate(input=byt.getbuffer())
+            print("Done.")
+    except FileNotFoundError:
+        print("\n[ERROR] You do not have FFMPEG or it's path is not in system variables.")
+        quit()
 
     # fix metadata && check if corrupted
     try:
-        m = music_tag.load_file(os.path.join(FINAL_PATH, fileFormat))
-        del m["album"]
-        del m["tracknumber"]
-        del m["genre"]
-        m["artist"] = i["artist"]  # f.split(' - ')[0]
-        m["title"] = i["title"]  # f.split(' - ')[1][:-4]
-        m.save()
-    except mutagen.mp3.HeaderNotFoundError:
+        m = music_tag.load_file(fileName)
+        del m["album"]  # type: ignore
+        del m["tracknumber"]  # type: ignore
+        del m["genre"]  # type: ignore
+        m["artist"] = aud["artist"]  # type: ignore
+        m["title"] = aud["title"]  # type: ignore
+        m.save()  # type: ignore
+    except mutagen.mp3.HeaderNotFoundError:  # type: ignore
         print(
             "{} - Failed to download (HeaderNotFoundError): {}".format(
-                ind + 1, fileFormat
+                ind + 1, fileName
             )
         )
-        failed.append(fileFormat)
+        failed.append(fileName)
     except PermissionError:
         print(
             "{} - Failed to download (PermissionError). Re-run the app: {}".format(
-                ind + 1, fileFormat
+                ind + 1, fileName
             )
         )
-        failed.append(fileFormat)
+        failed.append(fileName)
 
 
 # remove failed downloads
 if len(failed) > 0:
-    print("\nFailed to download {} files:".format(len(failed)))
-    for num, i in enumerate(failed):
-        print("{}. {}".format(num + 1, i))
-        os.remove(os.path.join(FINAL_PATH, i))
+    print("\n[WARNING] Failed to download {} files:".format(len(failed)))
+    for num, aud in enumerate(failed):
+        print("{}. {}".format(num + 1, aud))
+        os.remove(os.path.join(FINAL_PATH, aud))
 else:
-    print("\nNo failed downloads")
+    print("\n[INFO] No failed downloads")
+print("[INFO] Done.")
