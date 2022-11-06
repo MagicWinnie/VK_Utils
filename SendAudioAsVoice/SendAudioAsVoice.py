@@ -13,12 +13,15 @@ import vk_api
 def auth_handler():
     key = input("Enter authentication code: ")
     remember_device = True
-
     return key, remember_device
 
 
 parser = ArgumentParser()
-parser.add_argument("file", type=str, help="Your audio file")
+parser.add_argument(
+    "file",
+    type=str,
+    help="Your audio file"
+)
 parser.add_argument(
     "--login",
     type=str,
@@ -27,10 +30,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-
-assert os.path.isfile(
-    args.login
-), "[ERROR] {} is not a file or it does not exist!".format(args.login)
+assert os.path.isfile(args.login),\
+    "[ERROR] {} is not a file or it does not exist!".format(args.login)
 with open(args.login, "r") as f:
     j = json.load(f)
 
@@ -40,36 +41,35 @@ LOGIN = j["login"]
 PASSWORD = j["pass"]
 
 vk_session = vk_api.VkApi(
-    login=LOGIN, password=PASSWORD, auth_handler=auth_handler)
+    login=LOGIN, password=PASSWORD,
+    auth_handler=auth_handler
+)
 vk_session.auth(token_only=True)
-
 vk = vk_session.get_api()
 
-
 print("[INFO] Converting the file...")
-assert os.path.isfile(
-    args.file
-), "[ERROR] {} is not a file or it does not exist!".format(args.file)
+assert os.path.isfile(args.file),\
+    "[ERROR] {} is not a file or it does not exist!".format(args.file)
 SUPPORTED_IN_FORMATS = ("mp3", "ogg", "wav", "aac", "mp4", "flv")
-assert (
-    args.file.split(".")[-1] in SUPPORTED_IN_FORMATS
-), "[ERROR] {} is not supported! Only supported: {}".format(
-    args.file, ", ".join(SUPPORTED_IN_FORMATS)
+assert (args.file.split(".")[-1] in SUPPORTED_IN_FORMATS),\
+    "[ERROR] {} is not supported! Only supported: {}".format(
+        args.file, ", ".join(SUPPORTED_IN_FORMATS)
 )
 sound = AudioSegment.from_file(args.file)
 sound.export(args.file.split(".")[0] + ".ogg", format="ogg")
 print("[INFO] Converted the file...")
-
 
 print("[INFO] Getting upload server...")
 upload_url = vk.docs.getMessagesUploadServer(
     type="audio_message")["upload_url"]
 print("[INFO] Got upload server...")
 
-
 print("[INFO] Getting file data...")
 response = requests.post(
-    upload_url, files={"file": open(args.file.split(".")[0] + ".ogg", "rb")}
+    upload_url,
+    files={
+        "file": open(args.file.split(".")[0] + ".ogg", "rb")
+    }
 )
 raw = response.content.decode("utf-8")
 if "error" in raw:
@@ -78,7 +78,6 @@ if "error" in raw:
     exit(-1)
 processed = ast.literal_eval(raw)["file"]
 print("[INFO] Got file data...")
-
 
 print("[INFO] Saving the file...")
 processed = vk.docs.save(file=processed)
