@@ -79,7 +79,17 @@ known_faces_filenames = []
 print("[INFO] Loading known face data...")
 for f in tqdm(glob.glob("known_people/*.jpg")):
     img = face_recognition.load_image_file(f)
-    img_encodings = face_recognition.face_encodings(img, model=MODEL)
+    face_locations = face_recognition.face_locations(
+        img,
+        number_of_times_to_upsample=0,
+        model=FACE_BOXES_MODEL
+    )
+    img_encodings = face_recognition.face_encodings(
+        img,
+        known_face_locations=face_locations,
+        num_jitters=NUM_JITTERS,
+        model=FACIAL_POINTS_MODEL
+    )
     if len(img_encodings) == 0:
         tqdm.write(f"[WARNING] No faces were found in {f}.")
         continue
@@ -110,7 +120,17 @@ for j in tqdm(range(IMG_URLS_OFFSET, len(img_urls))):
     if not image.size:
         tqdm.write(f"[ERROR] Could not open {img_url}. Check internet connection.")
         continue
-    image_encodings = face_recognition.face_encodings(image, model=MODEL)
+    face_locations = face_recognition.face_locations(
+        image, 
+        number_of_times_to_upsample=0, 
+        model=FACE_BOXES_MODEL
+    )
+    image_encodings = face_recognition.face_encodings(
+        image,
+        known_face_locations=face_locations,
+        num_jitters=NUM_JITTERS,
+        model=FACIAL_POINTS_MODEL
+    )
     if len(image_encodings) == 0 and not SUPPRESS_NOT_FOUND_IN_ALBUMS:
         tqdm.write(f"[WARNING] No faces were found. URL: {img_url}.")
         continue
