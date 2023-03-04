@@ -1,19 +1,19 @@
 # basic
-vk-api>=11.8
-requests>=2.22
-bs4
+vk-api==11.9.9
+requests==2.28.1
+bs4==0.0.1
 # music related
-pydub
-mutagen
-music-tag
-streamlink
-ffmpeg-python
+pydub==0.25.1
+mutagen==1.46.0
+music-tag==0.4.3
+streamlink==5.1.2
+ffmpeg-python==0.2.0
 # message analysis, tables, face recognition
-numpy>=1.18
-pandas
-matplotlib>=3.3
+numpy==1.21.6
+pandas==1.3.5
+matplotlib==3.5.3
 # face recognition
-tqdm
-scikit-image
-dlib
-face_recognition
+tqdm==4.64.1
+scikit-image==0.19.3
+dlib==19.24.99
+face-recognition==1.3.0
