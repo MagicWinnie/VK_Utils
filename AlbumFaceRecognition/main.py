@@ -43,21 +43,26 @@ if not RESTORE_PHOTO_URLS_FROM_PICKLE:
     vk = vk_session.get_api()
 
     # get photo urls
-    albums_dict = vk.photos.getAlbums(
-        owner_id=OWNER_ID,
-        album_ids=ALBUM_IDS
+    albums = tools.get_all_iter(
+        'photos.getAlbums', 10,
+        {
+            "owner_id": OWNER_ID,
+            "album_ids": ALBUM_IDS
+        }
     )
-    albums = albums_dict['items']
     print('[INFO] Getting images from albums.')
     for album in tqdm(albums):
         if album['created'] < OLDEST_ALBUM_UNIX_TIME:
             continue
-        photos = vk.photos.get(
-            owner_id=album['owner_id'],
-            album_id=album['id'],
-            photo_sizes='1'
+        photos = tools.get_all_iter(
+            'photos.get', 10,
+            {
+                "owner_id": album['owner_id'],
+                "album_id": album['id'],
+                "photo_sizes": '1'
+            }
         )
-        for photo in photos['items']:
+        for photo in photos:
             img_url = ''
             for size in photo['sizes']:
                 if size['type'] == IMAGE_SIZE_TYPE:

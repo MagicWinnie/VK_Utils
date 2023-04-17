@@ -61,7 +61,7 @@ tools = vk_api.VkTools(vk_session)
 vk = vk_session.get_api()
 
 posts = tools.get_all_iter(
-    'wall.get', 100,
+    'wall.get', 10,
     {
         "domain": args.user,
         "filter": args.filter
